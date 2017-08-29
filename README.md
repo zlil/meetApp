@@ -1,5 +1,5 @@
 # meetapp
-vue.js application
+vue.js single page application
 
 > meetup application
 

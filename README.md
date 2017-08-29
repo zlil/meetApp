@@ -1,2 +1,0 @@
-# meetApp
-vue.js application

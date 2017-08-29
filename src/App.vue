@@ -11,7 +11,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar>
-      <v-toolbar-title><router-link to="/" tag="span" style="cursor: pointer">MeetApp</router-link></v-toolbar-title>
+      <v-toolbar-title class="hidden-xs-only"><router-link to="/" tag="span" style="cursor: pointer">MeetApp</router-link></v-toolbar-title>
       <v-toolbar-side-icon @click.stop="sideNav = !sideNav" class="hidden-sm-and-up"></v-toolbar-side-icon>
       <v-spacer></v-spacer>
       <v-toolbar-items>

@@ -10,15 +10,16 @@
     </v-layout>
     <v-layout row wrap>
       <v-flex xs12>
-        <v-carousel>
-          <v-carousel-item v-for="meetup in meetups" :src="meetup.imageUrl" :key="meetup.id">
+        <v-carousel style="cursor: pointer;">
+          <v-carousel-item v-for="meetup in meetups" :src="meetup.imageUrl" :key="meetup.id"
+                           @click="onLoadMeetup(meetup.id)">
             <div wrap class="title">{{meetup.title}}</div>
           </v-carousel-item>
         </v-carousel>
       </v-flex>
     </v-layout>
     <v-layout row wrap class="mt-2">
-      <v-flex xs12 sm6 class="text-xs-center">
+      <v-flex xs12 class="text-xs-center">
         <p>Join Our Awsome Meetup!</p>
       </v-flex>
     </v-layout>
@@ -28,20 +29,14 @@
 
 <script>
   export default {
-    data() {
-      return {
-        meetups: [
-          {
-            imageUrl: 'https://thenypost.files.wordpress.com/2017/04/new-york.jpg',
-            id: '343244324',
-            title: 'Meetup in New York'
-          },
-          {
-            imageUrl: 'https://cache-graphicslib.viator.com/graphicslib/thumbs360x240/7845/SITours/eiffel-tower-priority-access-ticket-with-host-in-paris-299567.jpg',
-            id: '435435436',
-            title: 'Meetup in Paris'
-          }
-        ]
+    computed: {
+      meetups () {
+        return this.$store.getters.featuredMeetups
+      }
+    },
+    methods: {
+      onLoadMeetup(meetupId) {
+        this.$router.push('./meetups/' + meetupId)
       }
     }
   }

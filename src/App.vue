@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer v-model="sideNav" temporary>
       <v-list>
-        <v-list-tile v-for="item in menuItems" :key="item.title" router :to="item.link">
+        <v-list-tile v-for="item in menuItems" :key="item.title" :to="item.link">
           <v-list-tile-action>
             <v-icon>{{ item.icon }}</v-icon>
           </v-list-tile-action>
@@ -11,11 +11,11 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar>
-      <v-toolbar-title class="hidden-xs-only"><router-link to="/" tag="span" style="cursor: pointer">MeetApp</router-link></v-toolbar-title>
-      <v-toolbar-side-icon @click.stop="sideNav = !sideNav" class="hidden-sm-and-up"></v-toolbar-side-icon>
+      <v-toolbar-title><router-link to="/" tag="span" style="cursor: pointer">MeetApp</router-link></v-toolbar-title>
+      <span class="hidden-sm-and-up"><v-toolbar-side-icon @click.stop="sideNav = !sideNav"></v-toolbar-side-icon></span>
       <v-spacer></v-spacer>
-      <v-toolbar-items>
-        <v-btn flat v-for="item in menuItems" :key="item.title" router :to="item.link">
+      <v-toolbar-items class="hidden-xs-only">
+        <v-btn flat v-for="item in menuItems" :key="item.title" :to="item.link">
           <v-icon left>{{ item.icon }}</v-icon>
           {{ item.title }}
         </v-btn>

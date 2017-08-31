@@ -11,8 +11,7 @@
           </v-card-media>
           <v-card-text>
             <div>{{ meetup.date}} </div>
-            <div class="info--text">Lorem Ipsum dolor sit amet, consectur adicpics elit.
-              Adicipiti assumeda ad deurna dolrurm eum, expedicta dihi lilito sipsuem, mobois, odio uqretnt .</div>
+            <div class="info--text"> {{ meetup.description }}</div>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>

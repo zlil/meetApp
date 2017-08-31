@@ -1,5 +1,82 @@
 <template>
-  <div>
-    <p>The Create Meetups Page</p>
-  </div>
+  <v-container>
+    <v-layout row>
+      <v-flex xs12 sm6 offset-sm3>
+        <h4>Create a new Meetup</h4>
+      </v-flex>
+    </v-layout>
+    <v-layout row>
+      <v-flex xs12>
+        <form @submit.prevent="onCreateMeetup">
+          <v-layout row>
+            <v-flex xs12 sm6 offset-sm3>
+              <v-text-field name="title" id="title" label="Title" v-model="title" required></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-layout row>
+            <v-flex xs12 sm6 offset-sm3>
+              <v-text-field name="location" id="location" label="Location" v-model="location" required></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-layout row>
+            <v-flex xs12 sm6 offset-sm3>
+              <v-text-field name="image-url" id="imageUrl" label="Image URL" v-model="imageUrl" required></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-layout row>
+            <v-flex xs12 sm6 offset-sm3>
+              <img :src="imageUrl" height="150">
+            </v-flex>
+          </v-layout>
+          <v-layout row>
+            <v-flex xs12 sm6 offset-sm3>
+              <v-text-field name="description" id="description" label="Description"  v-model="description" multi-line required></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-layout row>
+            <v-flex xs12 sm6 offset-sm3>
+              <v-btn class="primary" :disabled="!formIsValid" type="submit">
+                Create Meetup
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </form>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
+
+<script>
+  export default {
+    data(){
+      return {
+        title: '',
+        imageUrl: '',
+        location: '',
+        description: '',
+      }
+    },
+    computed: {
+      formIsValid () {
+        return this.title !== '' && this.location !== '' && this.description !== '' && this.imageUrl !== ''
+      }
+    },
+    methods: {
+      onCreateMeetup () {
+        if(!this.formIsValid){
+          return
+        }
+        const meetupData = {
+          title: this.title,
+          location: this.location,
+          description: this.description,
+          imageUrl: this.imageUrl,
+          date: new Date()
+
+        }
+        this.$store.dispatch('createMeetup', meetupData);
+        this.$router.push('/meetups');
+      }
+    }
+  }
+</script>

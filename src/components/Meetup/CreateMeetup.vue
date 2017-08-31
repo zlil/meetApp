@@ -30,7 +30,23 @@
           </v-layout>
           <v-layout row>
             <v-flex xs12 sm6 offset-sm3>
-              <v-text-field name="description" id="description" label="Description"  v-model="description" multi-line required></v-text-field>
+              <v-text-field name="description" id="description" label="Description" v-model="description" multi-line
+                            required></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-layout row>
+            <v-flex xs12 sm6 offset-sm3>
+              <h6>Choose a Date & Time</h6>
+            </v-flex>
+          </v-layout>
+          <v-layout row>
+            <v-flex xs12 sm6 offset-sm3 class="mb-2">
+              <v-date-picker v-model="date"></v-date-picker>
+            </v-flex>
+          </v-layout>
+          <v-layout row>
+            <v-flex xs12 sm6 offset-sm3>
+              <v-time-picker v-model="time" format="24hr"></v-time-picker>
             </v-flex>
           </v-layout>
           <v-layout row>
@@ -48,22 +64,37 @@
 
 <script>
   export default {
-    data(){
+    data() {
       return {
         title: '',
         imageUrl: '',
         location: '',
         description: '',
+        date: new Date(),
+        time: new Date()
       }
     },
     computed: {
-      formIsValid () {
+      formIsValid() {
         return this.title !== '' && this.location !== '' && this.description !== '' && this.imageUrl !== ''
+      },
+      submittableDateTime() {
+        const date = new Date(this.date)
+        if (typeof this.time === 'string') {
+          let hours = this.time.match(/^(\d+)/)[1]
+          const minutes = this.time.match(/:(\d+)/)[1]
+          date.setHours(hours)
+          date.setMinutes(minutes)
+        } else {
+          date.setHours(this.time.getHours())
+          date.setMinutes(this.time.getMinutes())
+        }
+        return date;
       }
     },
     methods: {
-      onCreateMeetup () {
-        if(!this.formIsValid){
+      onCreateMeetup() {
+        if (!this.formIsValid) {
           return
         }
         const meetupData = {
@@ -71,8 +102,7 @@
           location: this.location,
           description: this.description,
           imageUrl: this.imageUrl,
-          date: new Date()
-
+          date: this.submittableDateTime
         }
         this.$store.dispatch('createMeetup', meetupData);
         this.$router.push('/meetups');

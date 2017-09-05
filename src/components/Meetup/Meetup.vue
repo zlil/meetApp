@@ -11,7 +11,7 @@
           </v-card-media>
           <v-card-text>
             <div>{{ meetup.date}} </div>
-            <div class="info--text">When? {{ meetup.date | dateFilter}}, Where? {{ meetup.location }}, What? {{ meetup.description }}</div>
+            <div class="info--text">When? {{ meetup.date | dateFilter}}, Where? {{ meetup.location }}, What?  {{ meetup.description }}</div>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>

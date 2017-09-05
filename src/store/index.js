@@ -1,33 +1,36 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import * as Firebase from 'firebase'
+import * as firebase from 'firebase'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
     loadedMeetups: [
-      {
-        imageUrl: 'https://thenypost.files.wordpress.com/2017/04/new-york.jpg',
-        id: '343244324',
-        title: 'Meetup in New York',
-        date: new Date(),
-        location: 'New York',
-        description: 'bla bla'
-      },
-      {
-        imageUrl: 'https://cache-graphicslib.viator.com/graphicslib/thumbs360x240/7845/SITours/eiffel-tower-priority-access-ticket-with-host-in-paris-299567.jpg',
-        id: '435435436',
-        title: 'Meetup in Paris',
-        date: new Date(),
-        location: 'Paris',
-        description: 'lorm ipsum de lotlsd af'
-      }
+      // {
+      //   imageUrl: 'https://thenypost.files.wordpress.com/2017/04/new-york.jpg',
+      //   id: '343244324',
+      //   title: 'Meetup in New York',
+      //   date: new Date(),
+      //   location: 'New York',
+      //   description: 'bla bla'
+      // },
+      // {
+      //   imageUrl: 'https://cache-graphicslib.viator.com/graphicslib/thumbs360x240/7845/SITours/eiffel-tower-priority-access-ticket-with-host-in-paris-299567.jpg',
+      //   id: '435435436',
+      //   title: 'Meetup in Paris',
+      //   date: new Date(),
+      //   location: 'Paris',
+      //   description: 'lorm ipsum de lotlsd af'
+      // }
     ],
     user: null,
     loading: false,
     error: null
   },
   mutations: {
+    setLoadedMeetups (state, payload) {
+      state.loadedMeetups = payload
+    },
     createMeetup (state, payload) {
       state.loadedMeetups.push(payload); //push to the meetups array in the store
     },
@@ -45,19 +48,42 @@ export const store = new Vuex.Store({
     }
   },
   actions: { //actions are for async tasks at the store
+    loadMeetups ({commit}) {
+      commit('setLoading', true)
+      firebase.database().ref('meetups').once('value')
+        .then((data) => {
+          const meetups = []
+          const obj = data.val()
+          for(let key in obj){
+            meetups.push({
+              id: key,
+              title: obj[key].title,
+              description: obj[key].description,
+              imageUrl: obj[key].imageUrl,
+              date: obj[key].date,
+            })
+          }
+          commit('setLoadedMeetups', meetups)
+          commit('setLoading', false)
+        })
+        .catch((err) => {
+          console.log(err)
+          commit('setLoading', false)
+      })
+    },
     createMeetup ({commit}, payload ) {
       const meetup = {
         title: payload.title,
         location: payload.location,
         imageUrl: payload.imageUrl,
         description: payload.description,
-        date: payload.date
+        date: payload.date.toISOString()
       }
-      Firebase.database().ref('meetups').push(meetup)
+      firebase.database().ref('meetups').push(meetup)
         .then((data) => {
-          console.log(data)
+          const key = data.key
           // Reached out to firebase and stored it
-          commit('createMeetup', meetup);
+          commit('createMeetup', { ...meetup, id: key });
         })
         .catch((err) => {
           console.log(err)
@@ -67,7 +93,7 @@ export const store = new Vuex.Store({
     signUserUp ({commit}, payload) {
       commit('setLoading', true)
       commit('clearError')
-      Firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
+      firebase.auth().createUserWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
             commit('setLoading', false)
@@ -89,7 +115,7 @@ export const store = new Vuex.Store({
     signUserIn ({commit}, payload) {
       commit('setLoading', true)
       commit('clearError')
-      Firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
+      firebase.auth().signInWithEmailAndPassword(payload.email, payload.password)
         .then(
           user => {
             commit('setLoading', false)

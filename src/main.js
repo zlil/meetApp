@@ -30,5 +30,7 @@ new Vue({
       storageBucket: 'meetapp-b2ca1.appspot.com',
       messagingSenderId: '147947745237'
     })
+
+    this.$store.dispatch('loadMeetups')
   }
 })

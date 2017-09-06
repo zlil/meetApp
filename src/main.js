@@ -4,7 +4,7 @@ import App from './App'
 import router from './router'
 import { store } from './store'
 import DateFilter from './filters/date'
-import * as Firebase from 'firebase'
+import * as firebase from 'firebase'
 import AlertComp from './components/Shared/Alert.vue'
 
 
@@ -22,7 +22,7 @@ new Vue({
   store,
   render: h => h(App),
   created () {
-    Firebase.initializeApp({
+    firebase.initializeApp({
       apiKey: 'AIzaSyDd-fK3kTem_toAfTLWo4DcEVBrgWJuV6M',
       authDomain: 'meetapp-b2ca1.firebaseapp.com',
       databaseURL: 'https://meetapp-b2ca1.firebaseio.com',
@@ -30,7 +30,11 @@ new Vue({
       storageBucket: 'meetapp-b2ca1.appspot.com',
       messagingSenderId: '147947745237'
     })
-
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.$store.dispatch('autoSignIn', user)
+      }
+    })
     this.$store.dispatch('loadMeetups')
   }
 })
